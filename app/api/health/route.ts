@@ -10,7 +10,7 @@ export async function GET(){
       sodexKeyName:Boolean(process.env.SODEX_API_KEY_NAME),
       sodexPublicKey:Boolean(process.env.SODEX_PUBLIC_KEY),
       sodexApiPrivateKey:Boolean(process.env.SODEX_API_PRIVATE_KEY || process.env.SODEX_PRIVATE_KEY || process.env.SODEX_WALLET_PRIVATE_KEY),
-      aiRouter:Boolean(process.env.AI_API_KEY),
+      aiRouter:Boolean(process.env.AI_API_KEY || process.env.CHAINOPERA_API_KEY || process.env.GEMINI_API_KEY || process.env.OPENAI_API_KEY),
       aiBaseUrl:process.env.AI_BASE_URL || 'https://router.chainopera.ai/v1',
       aiModel:process.env.AI_MODEL || 'gemini-2.0-flash',
       liveTrading:process.env.ENABLE_LIVE_TRADING === 'true',

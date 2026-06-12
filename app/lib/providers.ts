@@ -1,3 +1,4 @@
+import OpenAI from "openai";
 import { ethers } from 'ethers';
 
 export const runtime = 'nodejs';

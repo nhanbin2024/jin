@@ -19,3 +19,7 @@ button, input, select, textarea { font: inherit; }
 .no-data { border:1px dashed rgba(148,163,184,.26); background:rgba(15,23,42,.46); color:#93a4c7; }
 .input{width:100%;border-radius:1rem;background:#050b16;border:1px solid rgba(148,163,184,.22);padding:.8rem 1rem;outline:none;color:#eef4ff;margin-bottom:.75rem}.input:focus{border-color:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.15)}.shadow-3d{box-shadow:0 18px 40px rgba(59,130,246,.22),inset 0 1px 0 rgba(255,255,255,.35)}.hud-card{background:radial-gradient(circle at 20% 10%,rgba(34,211,238,.18),transparent 34%),linear-gradient(135deg,rgba(15,23,42,.96),rgba(17,24,39,.76));border:1px solid rgba(125,211,252,.18);box-shadow:0 20px 80px rgba(0,0,0,.28)}.holo-card{background:linear-gradient(135deg,rgba(15,23,42,.95),rgba(30,41,59,.55));border:1px solid rgba(125,211,252,.14);transform-style:preserve-3d;transition:.25s ease}.holo-card:hover{transform:perspective(900px) rotateX(4deg) rotateY(-5deg) translateY(-4px);box-shadow:0 24px 70px rgba(14,165,233,.18)}
 .label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin:10px 0 6px}
+
+@keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.ticker-marquee { width: max-content; animation: ticker-scroll 90s linear infinite; }
+.ticker-marquee:hover { animation-play-state: paused; }

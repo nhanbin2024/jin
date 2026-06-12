@@ -297,14 +297,14 @@ export function deriveSignals(coins: Coin[]) {
 }
 
 export async function buildAIAnswer(question: string, context: any) {
-  const apiKey = process.env.AI_API_KEY || process.env.CHAINOPERA_API_KEY || process.env.GEMINI_API_KEY || process.env.OPENAI_API_KEY;
+  const apiKey = process.env.AI_API_KEY || process.env.CHAINOPERA_API_KEY || process.env.OPENAI_API_KEY;
   const baseURL = (process.env.AI_BASE_URL || 'https://router.chainopera.ai/v1').replace(/\/$/, '');
-  const model = process.env.AI_MODEL || 'gemini-2.0-flash';
+  const model = process.env.AI_MODEL || 'Qwen3-32B';
 
   if (!apiKey) {
     return {
       ok: false,
-      answer: 'AI router is unavailable. Add AI_API_KEY in Vercel Environment Variables. Optional aliases supported: CHAINOPERA_API_KEY, GEMINI_API_KEY, OPENAI_API_KEY.',
+      answer: 'AI router is unavailable. Add AI_API_KEY in Vercel Environment Variables. Optional aliases supported: CHAINOPERA_API_KEY or OPENAI_API_KEY.',
       provider: 'ChainOpera OpenAI-compatible router',
       model,
     };
@@ -317,7 +317,7 @@ ${JSON.stringify(context).slice(0, 22000)}
 User request:
 ${question}
 
-Return a concise, useful answer with sections: Summary, Market Evidence, SoDEX Execution Context, Risks, Next Action.`;
+Return a concise useful answer with sections: Summary, Market Evidence, SoDEX Execution Context, Risks, Next Action.`;
 
   const r = await fetchJson(`${baseURL}/chat/completions`, {
     method: 'POST',

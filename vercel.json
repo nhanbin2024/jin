@@ -1,5 +1,6 @@
 {
   "installCommand": "npm install --legacy-peer-deps --registry=https://registry.npmjs.org/ --fetch-retries=10 --fetch-retry-mintimeout=20000 --fetch-retry-maxtimeout=120000",
+  "buildCommand": "npm run build",
   "framework": "nextjs",
   "crons": [
     {

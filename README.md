@@ -7,7 +7,7 @@ A live-only crypto trading web app for SoDEX buildathon workflows.
 - Futures-style terminal: leverage slider, cross/isolated mode, TP/SL and server preview.
 - Automation Center: timed scan / preview / live-mode schedule config.
 - Coin Universe: hundreds of live coins and real icons from CoinGecko.
-- SoSoValue Research Desk: live news/research feed and AI report generation through an OpenAI-compatible AI router.
+- SoSoValue Research Desk: live news/research feed and ChainOpera OpenAI-compatible AI report generation.
 - Signal Engine: momentum, liquidity, risk and conviction scores from live market data.
 - Portfolio OS: locked until a real wallet is connected.
 
@@ -24,14 +24,7 @@ SODEX_PRIVATE_KEY=
 SODEX_WALLET_PRIVATE_KEY=
 AI_API_KEY=
 AI_BASE_URL=https://router.chainopera.ai/v1
-AI_MODEL=AI router-2.0-flash
-AI_MAX_TOKENS=512
-AI_TEMPERATURE=0.5
-AI_TOP_P=0.7
-# Optional fallback only if using Google AI router direct
-AI_API_KEY=
-AI_BASE_URL=https://router.chainopera.ai/v1
-AI_MODEL=AI router-2.0-flash
+AI_MODEL=gemini-2.0-flash
 NEXT_PUBLIC_APP_URL=
 ENABLE_LIVE_TRADING=false
 ```

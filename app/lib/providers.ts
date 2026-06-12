@@ -1,4 +1,3 @@
-import OpenAI from "openai";
 import { ethers } from 'ethers';
 
 export const runtime = 'nodejs';
@@ -297,55 +296,62 @@ export function deriveSignals(coins: Coin[]) {
   });
 }
 
-export async function buildAiAnswer(question: string, context: any) {
-  const apiKey = process.env.AI_API_KEY || process.env.CHAINOPERA_API_KEY;
+export async function buildAIAnswer(question: string, context: any) {
+  const apiKey = process.env.AI_API_KEY;
   const baseURL = (process.env.AI_BASE_URL || 'https://router.chainopera.ai/v1').replace(/\/$/, '');
   const model = process.env.AI_MODEL || 'gemini-2.0-flash';
 
   if (!apiKey) {
     return {
       ok: false,
-      answer: 'AI provider is unavailable. Add AI_API_KEY, AI_BASE_URL, and AI_MODEL in Vercel Environment Variables.',
+      answer: 'AI router is unavailable because AI_API_KEY is not configured in Vercel Environment Variables.',
+      provider: 'ChainOpera OpenAI-compatible router',
+      model,
     };
   }
 
-  const prompt = `You are QuyNhon AI, a professional SoSoValue research and SoDEX trading copilot. Use only this live JSON context. If a field is unavailable, say unavailable. Do not invent prices, balances, order book data, portfolio data, positions, or news. Include risk controls, execution cautions, and source notes.\n\nLive context:\n${JSON.stringify(context).slice(0, 18000)}\n\nUser question: ${question}\n\nReturn concise actionable analysis with bullet points and clear caveats.`;
+  const system = 'You are QuyNhon AI, a SoSoValue research and SoDEX trading copilot. Use only the live context supplied by the server. Do not invent prices, balances, news, positions, or order status. If data is missing, say unavailable. Always include risk notes and whether the answer is research-only or execution-related.';
+  const user = `Live context JSON:
+${JSON.stringify(context).slice(0, 22000)}
 
-  try {
-    const openai = new OpenAI({ apiKey, baseURL });
-    const completion = await openai.chat.completions.create({
+User request:
+${question}
+
+Return a concise, useful answer with sections: Summary, Market Evidence, SoDEX Execution Context, Risks, Next Action.`;
+
+  const r = await fetchJson(`${baseURL}/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
       stream: false,
       model,
-      max_tokens: Number(process.env.AI_MAX_TOKENS || 512),
-      temperature: Number(process.env.AI_TEMPERATURE || 0.5),
-      top_p: Number(process.env.AI_TOP_P || 0.7),
       messages: [
-        {
-          role: 'system',
-          content: 'You are QuyNhon AI. Use live SoSoValue and SoDEX context only. Never invent market data. Do not reveal secrets, API keys, private keys, signatures, nonces, or server environment values.',
-        },
-        { role: 'user', content: prompt },
+        { role: 'system', content: system },
+        { role: 'user', content: user },
       ],
-    });
+      max_tokens: 900,
+      temperature: 0.5,
+      top_p: 0.7,
+    }),
+  }, 30000);
 
-    return {
-      ok: true,
-      answer: completion.choices?.[0]?.message?.content || 'No answer returned by the AI router.',
-      provider: 'chainopera-openai-compatible',
-      model,
-    };
-  } catch (error: any) {
+  if (!r.ok) {
     return {
       ok: false,
-      answer: 'AI router request failed. Check AI_API_KEY, AI_BASE_URL, AI_MODEL, and ChainOpera account quota.',
-      error: error?.message || 'Unknown AI router error',
-      provider: 'chainopera-openai-compatible',
+      answer: 'AI router request failed. Check AI_API_KEY, AI_BASE_URL, and AI_MODEL in Vercel Environment Variables.',
+      provider: 'ChainOpera OpenAI-compatible router',
       model,
+      error: r.data,
     };
   }
+
+  const answer = r.data?.choices?.[0]?.message?.content || r.data?.output_text || 'No answer returned by AI router.';
+  return { ok: true, answer, provider: 'ChainOpera OpenAI-compatible router', model };
 }
 
-export const buildChainOperaAnswer = buildAiAnswer;
 
 function normalizeAddress(value: any) {
   return String(value || '').trim().toLowerCase();

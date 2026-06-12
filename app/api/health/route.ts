@@ -1,3 +1,23 @@
 import { NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
-export async function GET(){ return NextResponse.json({ ok:true, name:'QuyNhon AI', liveOnly:true, configured:{ sosovalue:Boolean(process.env.SOSOVALUE_API_KEY), sodexKeyName:Boolean(process.env.SODEX_API_KEY_NAME), sodexPublicKey:Boolean(process.env.SODEX_PUBLIC_KEY), sodexApiPrivateKey:Boolean(process.env.SODEX_API_PRIVATE_KEY), sodexWalletPrivateKey:Boolean(process.env.SODEX_WALLET_PRIVATE_KEY), ai:Boolean(process.env.AI_API_KEY || process.env.CHAINOPERA_API_KEY), aiBaseUrl:Boolean(process.env.AI_BASE_URL), aiModel:process.env.AI_MODEL || 'gemini-2.0-flash', liveTrading:process.env.ENABLE_LIVE_TRADING === 'true' }, timestamp:new Date().toISOString() }); }
+export async function GET(){
+  return NextResponse.json({
+    ok:true,
+    name:'QuyNhon AI',
+    liveOnly:true,
+    configured:{
+      sosovalue:Boolean(process.env.SOSOVALUE_API_KEY),
+      sodexKeyName:Boolean(process.env.SODEX_API_KEY_NAME),
+      sodexPublicKey:Boolean(process.env.SODEX_PUBLIC_KEY),
+      sodexApiPrivateKey:Boolean(process.env.SODEX_API_PRIVATE_KEY || process.env.SODEX_PRIVATE_KEY || process.env.SODEX_WALLET_PRIVATE_KEY),
+      aiRouter:Boolean(process.env.AI_API_KEY),
+      aiBaseUrl:process.env.AI_BASE_URL || 'https://router.chainopera.ai/v1',
+      aiModel:process.env.AI_MODEL || 'gemini-2.0-flash',
+      liveTrading:process.env.ENABLE_LIVE_TRADING === 'true',
+      adminWallet:Boolean(process.env.ADMIN_WALLET),
+      adminSecret:Boolean(process.env.ADMIN_SECRET),
+      automationSecret:Boolean(process.env.AUTOMATION_SECRET || process.env.ADMIN_SECRET),
+    },
+    timestamp:new Date().toISOString()
+  });
+}

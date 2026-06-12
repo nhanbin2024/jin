@@ -3,7 +3,7 @@
   "framework": "nextjs",
   "crons": [
     {
-      "path": "/api/automation",
+      "path": "/api/automation?secret=CHANGE_ME_AUTOMATION_SECRET",
       "schedule": "0 0 * * *"
     }
   ]
